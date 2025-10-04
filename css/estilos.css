@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box; 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+header {
+    background-image: url('../img/index/header_fondo.jpg');
+    background-size:cover;
+    background-position:calc(100%) calc(72%);
+    color: white;
+    padding: 1rem 1rem;
+    text-align: center;
+    max-width: 100%;
+    opacity: .85;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background-color: #f9e8ee;
+    font-size: 1.125rem;   
+    max-width: 100%;
+    justify-content: center;
+}
+main {
+    max-width: 100%;    
+}
+
+h1{
+    color: #f5ecec;
+    font-size: 2.3125rem;
+}
+
+h2{
+    font-size: 1.75rem;
+}
+
+h3{
+    font-size: 1.3125rem;
+}
+footer {
+    text-align: center;    
+    max-width: 100%;
+    padding: 2em 1em;
+    background-color: #f8d7e3;
+    color: #333;
+    font-size: 1rem;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #070738;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+
+
+#bienvenida{
+    text-align: center;
+}
+
+#bienvenida_p{
+    text-align: center;
+    font-size: 1rem;
+}
+
+.img_bienvenida {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 25rem;
+    height: auto;
+    border: black solid;
+}
+
+#cita{
+    text-align: center;
+}
+
+#cita_boton {
+    background-color: #c71585;
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    border-radius: 1.875rem;
+    font-size: 1.1em;
+    cursor:pointer;
+    transition: background-color 0.3s ease;
+    position: center;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#cita_boton:hover {
+    background-color: #a0136c;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 1em 0;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(199, 21, 133, 0.7);
+    padding: 0.5em 1em;
+    border-radius: 1.25rem;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: rgba(160, 19, 108, 0.9);
+}
+
+#servicios {
+    padding-bottom: 1em;
+    text-align: center;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#servicios h2 {
+    font-size: 2em;
+    margin-top: 0.3em;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    color: #c71585;
+}
+
+.servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(25rem,1fr));
+    width: 100%;
+    max-width: 51rem;
+    margin: 0 auto;
+    margin-left: auto;
+    justify-items: center;
+}
+
+
+
+.servicio-card {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 22rem;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.servicio-card:hover img{
+    transform: scale(1.06);
+}
+
+.servicio-card img {
+    height: 20.625rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5em;
+    object-fit: cover;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+.servicio-card-descripcion{
+    text-align: left;
+    max-width: 100%;
+    text-indent: 1em;
+    font-size: 1rem;
+}
+
+form {
+  max-width: 43.75rem;
+  margin: 1em auto;
+  background-color: #fff0f5;
+  padding: 2em;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(199, 21, 133, 0.2);
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 1em;
+}
+
+legend {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #c71585;
+  text-align: left;
+}   
+
+label {
+  display: block;
+  font-weight: bold;
+  color: black;
+  text-align: left;
+  font-size: 1rem;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.6em;
+  border: 0.063rem solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1em;
+  background-color: #fff;
+}
+
+input[type="checkbox"] {
+    width: 2.5rem;
+    height: 2.5rem;
+    accent-color: #c71585;  
+    cursor: pointer;
+    margin-bottom: 1em;    
+}
+
+input[type="submit"]{
+    background-color: #c71585;
+    color: white;
+    border: none;
+    padding: 0.8em 1.5em;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-right: 1em;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+input[type="reset"] {
+  background-color: #c71550;
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 30px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-right: 1em;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+input[type="submit"]:hover{
+    background-color: #a0136c;
+}
+
+input[type="reset"]:hover {
+    background-color: #941717;
+}

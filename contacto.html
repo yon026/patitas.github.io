@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/estilos.css" />
+    <title>contacto | Patitas Limpias</title>
+  </head>
+  <body>
+    <header>
+      <h1>Peluqueria Patitas Limpias</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html#bienvenida">Inicio</a></li>
+          <li><a href="servicios.html#servicios-titulo">Servicios</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <form action="">
+        <fieldset>
+          <legend id="datos_personales">Datos personales</legend>
+          <p>Ingrese su nombre:</p>
+          <input
+            type="text"
+            name="nombre"
+            id="nombre"
+            maxlength="30"
+            placeholder="Mario Manuel"
+          />
+          <p>Ingrese su apellido:</p>
+          <input
+            type="text"
+            name="apellido"
+            id="apellido"
+            maxlength="30"
+            placeholder="Mendez Mentiel"
+          />
+          <p>Ingrese su numero de celular:</p>
+          <input
+            type="tel"
+            name="telefono"
+            id="telefono"
+            placeholder="3764123456"
+          />
+        </fieldset>
+        <fieldset>
+          <legend>Datos de la mascota</legend>
+          <p>Ingrese el nombre de la mascota:</p>
+          <input
+            type="text"
+            name="nombre"
+            id="nombre"
+            maxlength="30"
+            placeholder="Firulais"
+          />
+          <p>Ingrese la edad de su mascota:</p>
+          <input type="number" name="edad" id="edad" placeholder="10" />
+          <p>Elija el tamaño de su mascota:</p>
+          <select name="tamanio" id="tamanio">
+            <option value="1">Pequeño</option>
+            <option value="2">Mediano</option>
+            <option value="3">Grande</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Datos del servicio</legend>
+          <p>Elija el tipo de servicio que desea:</p>
+          <label for="opcion_1">Baño y corte</label>
+          <input type="checkbox" name="servicios" id="opcion_1" value="1" />
+          <label for="opcion_2">Desparasitación</label>
+          <input type="checkbox" name="servicios" id="opcion_2" value="2" />
+          <label for="opcion_3">Spa canino</label>
+          <input type="checkbox" name="servicios" id="opcion_3" value="3" />
+          <label for="opcion_4">Decoración y accesorios</label>
+          <input type="checkbox" name="servicios" id="opcion_4" value="4" />
+        </fieldset>
+        <input type="submit" value="Enviar" />
+        <input
+          type="reset"
+          value="Limpiar"
+          onclick="document.getElementById('nombre').focus();"
+        />
+      </form>
+    </main>
+    <footer>
+      <p>Patitas Limpias | Posadas, Misiones</p>
+      <p>&copy; 2025</p>
+    </footer>
+  </body>
+</html>
