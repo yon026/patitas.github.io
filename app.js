@@ -15,3 +15,29 @@ async function verificar() {
 }
 
 verificar();
+
+async function manejarAuth(tipo) {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (tipo === 'registro') {
+        const { data, error } = await db.auth.signUp({ email, password });
+        if (error) alert("Error: " + error.message);
+        else alert("¡Revisa tu correo para confirmar! (Si desactivaste confirmación, ya puedes entrar)");
+    } else {
+        const { data, error } = await db.auth.signInWithPassword({ email, password });
+        if (error) {
+            alert("Error: " + error.message);
+        } else {
+            // ¡Éxito! Redirigimos al área de reservas
+            window.location.href = 'reservas.html';
+        }
+    }
+}
+
+function mostrarRegistro() {
+    document.getElementById('auth-title').innerText = "Regístrate";
+    document.getElementById('btn-login').style.display = 'none';
+    document.getElementById('btn-registro').style.display = 'block';
+    document.getElementById('toggle-auth').innerHTML = '¿Ya tienes cuenta? <a href="#" onclick="location.reload()">Inicia sesión</a>';
+}
