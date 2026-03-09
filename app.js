@@ -22,14 +22,31 @@ async function manejarAuth(tipo) {
 
     if (tipo === 'registro') {
         const { data, error } = await db.auth.signUp({ email, password });
-        if (error) alert("Error: " + error.message);
-        else alert("¡Revisa tu correo para confirmar! (Si desactivaste confirmación, ya puedes entrar)");
+        if (error) return alert("Error: " + error.message);
+        alert("¡Registro exitoso! Ya puedes iniciar sesión.");
+        location.reload(); // Recarga para volver al formulario de login
     } else {
-        const { data, error } = await db.auth.signInWithPassword({ email, password });
-        if (error) {
-            alert("Error: " + error.message);
+        // 1. Iniciar sesión en el sistema de Auth
+        const { data: authData, error: authError } = await db.auth.signInWithPassword({ email, password });
+        
+        if (authError) return alert("Error: " + authError.message);
+
+        // 2. Buscar el ROL en nuestra tabla de perfiles usando el ID del usuario logueado
+        const { data: profile, error: profileError } = await db
+            .from('profiles')
+            .select('role')
+            .eq('id', authData.user.id)
+            .single();
+
+        if (profileError) {
+            console.error("Error al obtener perfil:", profileError);
+            return alert("Error al verificar permisos.");
+        }
+
+        // 3. Redirección inteligente
+        if (profile.role === 'admin') {
+            window.location.href = 'admin_dashboard.html';
         } else {
-            // ¡Éxito! Redirigimos al área de reservas
             window.location.href = 'reservas.html';
         }
     }
