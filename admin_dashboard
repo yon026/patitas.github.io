@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilos.css" />
+    <title>Panel Admin - Patitas Limpias</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body id="admin-content" style="display: none;">
+
+    <header>
+        <h1>Panel de Administración: Patitas Limpias 🐾</h1>
+        <p>Bienvenido, <span id="admin-email">...</span></p>
+        <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    </header>
+
+    <hr>
+
+    <section>
+        <h2>Próximos Turnos Agendados</h2>
+        <table border="1" id="tabla-turnos">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Servicio</th>
+                    <th>Cliente (Email)</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="lista-turnos">
+                </tbody>
+        </table>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        // Función de protección inmediata
+        async function verificarAdmin() {
+            // 'db' debe estar definido en tu app.js
+            const { data: { user } } = await db.auth.getUser();
+
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            const { data: profile, error } = await db
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .single();
+
+            if (error || !profile || profile.role !== 'admin') {
+                alert("Acceso denegado. Solo administradores.");
+                window.location.href = 'index.html';
+            } else {
+                // Si es admin, mostramos el contenido y cargamos los datos
+                document.getElementById('admin-content').style.display = 'block';
+                document.getElementById('admin-email').innerText = user.email;
+                cargarTurnosOcupados();
+            }
+        }
+
+        async function cargarTurnosOcupados() {
+            const { data: turnos, error } = await db
+                .from('turnos')
+                .select(`
+                    id,
+                    fecha_hora,
+                    estado,
+                    servicios ( nombre ),
+                    profiles ( email )
+                `)
+                .eq('estado', 'ocupado') // Solo queremos ver lo que ya se reservó
+                .order('fecha_hora', { ascending: true });
+
+            if (error) {
+                console.error("Error al cargar turnos:", error);
+                return;
+            }
+
+            const tbody = document.getElementById('lista-turnos');
+            tbody.innerHTML = '';
+
+            turnos.forEach(t => {
+                const fecha = new Date(t.fecha_hora).toLocaleString();
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${fecha}</td>
+                        <td>${t.servicios.nombre}</td>
+                        <td>${t.profiles ? t.profiles.email : 'N/A'}</td>
+                        <td>${t.estado}</td>
+                        <td>
+                            <button onclick="cancelarTurno(${t.id})">Liberar Turno</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function cancelarTurno(id) {
+            if(confirm("¿Estás seguro de que quieres liberar este turno?")) {
+                const { error } = await db
+                    .from('turnos')
+                    .update({ estado: 'disponible', cliente_id: null })
+                    .eq('id', id);
+                
+                if (!error) location.reload();
+            }
+        }
+
+        async function cerrarSesion() {
+            await db.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        // Ejecutar protección al cargar
+        verificarAdmin();
+    </script>
+</body>
+</html>
