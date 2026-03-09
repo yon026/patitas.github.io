@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="css/estilos.css" />
+    <title>Reservar Turno - Patitas Limpias</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Reserva tu turno 🐾</h1>
+
+    <section id="paso-1">
+        <h3>1. ¿Qué día quieres venir?</h3>
+        <input type="date" id="fecha-seleccionada" onchange="mostrarPaso2()">
+    </section>
+
+    <section id="paso-2" style="display:none; margin-top: 20px;">
+        <h3>2. Elige el servicio</h3>
+        <button onclick="seleccionarServicio(1)">Baño y Corte (Tarde)</button>
+        <button onclick="seleccionarServicio(2)">Decoración y Accesorios (Mañana)</button>
+    </section>
+
+    <section id="paso-3" style="display:none; margin-top: 20px;">
+        <h3>3. Horarios disponibles para este día:</h3>
+        <div id="contenedor-horarios">
+            </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        let fechaElegida = "";
+        let servicioElegido = null;
+
+        function mostrarPaso2() {
+            fechaElegida = document.getElementById('fecha-seleccionada').value;
+            if (fechaElegida) {
+                document.getElementById('paso-2').style.display = 'block';
+            }
+        }
+
+        async function seleccionarServicio(idServicio) {
+            servicioElegido = idServicio;
+            document.getElementById('paso-3').style.display = 'block';
+            await cargarHorarios();
+        }
+
+        async function cargarHorarios() {
+            const contenedor = document.getElementById('contenedor-horarios');
+            contenedor.innerHTML = "Buscando turnos...";
+
+            // Consultamos turnos que coincidan con la fecha, el servicio y estén disponibles
+            // Nota: Usamos rpc o filtros de rango dependiendo de cómo guardaste 'fecha_hora'
+            const { data: turnos, error } = await db
+                .from('turnos')
+                .select('id, fecha_hora')
+                .eq('servicio_id', servicioElegido)
+                .eq('estado', 'disponible')
+                // Filtramos por el día elegido (asumiendo formato YYYY-MM-DD)
+                .gte('fecha_hora', `${fechaElegida}T00:00:00`)
+                .lte('fecha_hora', `${fechaElegida}T23:59:59`);
+
+            if (error) {
+                contenedor.innerHTML = "Error al cargar horarios.";
+                return;
+            }
+
+            if (turnos.length === 0) {
+                contenedor.innerHTML = "No hay turnos disponibles para este día y servicio. 😔";
+                return;
+            }
+
+            contenedor.innerHTML = "";
+            turnos.forEach(turno => {
+                const hora = new Date(turno.fecha_hora).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const btn = document.createElement('button');
+                btn.innerText = hora;
+                btn.onclick = () => confirmarReserva(turno.id);
+                contenedor.appendChild(btn);
+            });
+        }
+
+        async function confirmarReserva(idTurno) {
+            const { data: { user } } = await db.auth.getUser();
+            
+            if (!user) {
+                alert("Debes iniciar sesión para reservar.");
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            if (confirm("¿Confirmas la reserva para este horario?")) {
+                const { error } = await db
+                    .from('turnos')
+                    .update({ 
+                        estado: 'ocupado', 
+                        cliente_id: user.id 
+                    })
+                    .eq('id', idTurno);
+
+                if (error) {
+                    alert("No se pudo reservar: " + error.message);
+                } else {
+                    alert("¡Turno reservado con éxito! Te esperamos.");
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
